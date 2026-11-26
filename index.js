@@ -74,6 +74,7 @@ let strafeInterval = null;
 let farmInterval = null;
 let authDoneThisSession = false;
 let cleaningTrash = false;
+let invListenerAttached = false;
 
 function isAlreadyRegistered() {
   if (!fs.existsSync(AUTH_FILE)) return false;
@@ -188,9 +189,19 @@ bot.on('spawn', () => {
   defaultMove.canDig = false;
   bot.pathfinder.setMovements(defaultMove);
   isBusy = false;
+
+  if (!invListenerAttached && bot.inventory) {
+    invListenerAttached = true;
+    bot.inventory.on('updateSlot', (slot, oldItem, newItem) => {
+      if (newItem && getItemTier(newItem.name) === 0) {
+        setTimeout(() => purgeJunkItems(), 150);
+      }
+    });
+  }
+
   console.log('Bot bluemc.org par spawn aur ready hai!');
 });
-function getItemTier(itemName) {
+        function getItemTier(itemName) {
   if (!itemName) return 0;
   const name = itemName.toLowerCase();
   const tier2Items = [
@@ -223,12 +234,6 @@ async function purgeJunkItems() {
   }
   cleaningTrash = false;
 }
-
-bot.inventory.on('updateSlot', (slot, oldItem, newItem) => {
-  if (newItem && getItemTier(newItem.name) === 0) {
-    setTimeout(() => purgeJunkItems(), 150);
-  }
-});
 
 function goToSafeZone(callback) {
   isBusy = true;
@@ -565,3 +570,4 @@ bot.on('chat', checkOwnerAndRun);
 bot.on('whisper', checkOwnerAndRun);
 bot.on('kicked', (reason) => console.log('Kicked:', reason));
 bot.on('error', (err) => console.log('Error:', err));
+              
