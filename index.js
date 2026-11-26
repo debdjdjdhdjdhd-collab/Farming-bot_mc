@@ -201,7 +201,8 @@ bot.on('spawn', () => {
 
   console.log('Bot bluemc.org par spawn aur ready hai!');
 });
-        function getItemTier(itemName) {
+
+function getItemTier(itemName) {
   if (!itemName) return 0;
   const name = itemName.toLowerCase();
   const tier2Items = [
@@ -353,6 +354,7 @@ async function getItemFromEC(itemName, count) {
     isBusy = false;
   });
 }
+
 function runCommandAndClickGUI(serverCommand, targetItemKeyword, index = 1) {
   return new Promise((resolve) => {
     let handled = false;
@@ -540,15 +542,7 @@ async function checkOwnerAndRun(username, message) {
   else if (cmd === '!openec') openEnderChestOnly();
   else if (cmd === '!get' && args[1]) getItemFromEC(args[1], args[2] ? parseInt(args[2]) : null);
   else if (cmd === '!drop') dropAllItems();
-  else if (cmd === '!dropall') withdrawAllAndDrop();
-  else if (cmd === '!dropitem' && args[1]) {
-    const t = bot.inventory.items().find((i) => i.name.toLowerCase().includes(args[1].toLowerCase()));
-    if (t) await bot.toss(t.type, null, args[2] ? Math.min(parseInt(args[2]), t.count) : t.count);
-  } else if (cmd === '!equip' && args[1]) {
-    const i = bot.inventory.items().find((x) => x.name.toLowerCase().includes(args[1].toLowerCase()));
-    if (i) { try { await bot.equip(i, args[2] || 'hand'); } catch {} }
-  } else if (cmd === '!armor') { await equipBestArmor(); bot.chat(`/msg ${CONFIG.owner} Best armor pehen liya!`); }
-  else if (cmd === '!eat') {
+    else if (cmd === '!eat') {
     const f = bot.inventory.items().find((i) => ['golden_apple', 'enchanted_golden_apple', 'cooked_beef', 'cooked_porkchop', 'golden_carrot', 'bread', 'cooked_chicken'].some((x) => i.name.includes(x)));
     if (f) { await bot.equip(f, 'hand'); await bot.consume(); }
   } else if (cmd === '!come') { const o = bot.players[CONFIG.owner]?.entity; if (o) bot.pathfinder.setGoal(new GoalNear(o.position.x, o.position.y, o.position.z, 2)); }
@@ -570,4 +564,4 @@ bot.on('chat', checkOwnerAndRun);
 bot.on('whisper', checkOwnerAndRun);
 bot.on('kicked', (reason) => console.log('Kicked:', reason));
 bot.on('error', (err) => console.log('Error:', err));
-              
+    
