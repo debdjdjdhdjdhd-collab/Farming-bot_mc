@@ -15,7 +15,7 @@ const CONFIG = {
   host: 'bluemc.org',
   port: 25565,
   version: '1.21.4',
-  username: 'LootMaster_01',
+  username: 'Spicy_GamerzX',
   auth: 'offline',
   password: 'Shivam',
   owner: 'Spicy_GamerzZ',
